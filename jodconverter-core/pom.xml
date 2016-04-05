@@ -85,8 +85,8 @@
       <version>1.1</version>
       <optional>true</optional>
     </dependency>
+    <!-- for more robust process management -->
     <dependency>
-      <!-- for more robust process management -->
       <groupId>org.hyperic</groupId>
       <artifactId>sigar</artifactId>
       <version>1.6.5.132</version>

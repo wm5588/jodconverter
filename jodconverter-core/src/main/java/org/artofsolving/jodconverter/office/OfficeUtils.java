@@ -13,6 +13,8 @@
 package org.artofsolving.jodconverter.office;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.artofsolving.jodconverter.util.PlatformUtils;
@@ -82,14 +84,39 @@ public class OfficeUtils {
         } else {
             // Linux or other *nix variants
             return findOfficeHome(
-                "/opt/openoffice.org3",
-                "/opt/libreoffice",
-                "/usr/lib/openoffice",
-                "/usr/lib/libreoffice"
+                      linuxOfficeHomes(50)
             );
         }
     }
-
+    
+    private static String[] linuxOfficeHomes(int officeMaxVersions){
+    	String path1 = "/usr/lib/openoffice";
+    	String path2 = "/opt/libreoffice";
+    	int size = (officeMaxVersions-4)*10;
+    	int from = 3;
+    	List<String> targetPaths = new ArrayList<String>(size*2+4);
+    	{
+    		targetPaths.add("/opt/openoffice.org3");
+    		targetPaths.add("/opt/libreoffice");
+    		targetPaths.add("/usr/lib/openoffice");
+    		targetPaths.add("/usr/lib/libreoffice");
+    	}
+    	StringBuilder sb = new StringBuilder();
+    	for (int i = 0; i < size; i++) {
+    		int mod = i%10;
+    		if(mod == 0){
+    			from += 1;
+    		}
+    		sb.delete(0, sb.length());
+    		targetPaths.add(sb.append(path1).append(from).append('.').append(mod).toString());
+    		sb.delete(0, sb.length());
+    		targetPaths.add(sb.append(path2).append(from).append('.').append(mod).toString());
+    		sb.delete(0, sb.length());
+		}
+    	String[] outArr = new String[targetPaths.size()];
+    	return targetPaths.toArray(outArr);
+    }
+    
     private static File findOfficeHome(String... knownPaths) {
         for (String path : knownPaths) {
             File home = new File(path);

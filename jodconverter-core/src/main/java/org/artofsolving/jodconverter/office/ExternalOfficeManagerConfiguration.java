@@ -15,6 +15,7 @@ package org.artofsolving.jodconverter.office;
 public class ExternalOfficeManagerConfiguration {
 
     private OfficeConnectionProtocol connectionProtocol = OfficeConnectionProtocol.SOCKET;
+    private String host="127.0.0.1";
     private int portNumber = 2002;
     private String pipeName = "office";
     private boolean connectOnStart = true;
@@ -24,6 +25,11 @@ public class ExternalOfficeManagerConfiguration {
         return this;
     }
 
+    public ExternalOfficeManagerConfiguration setHost(String host) {
+        this.host = host;
+        return this;
+    }
+    
     public ExternalOfficeManagerConfiguration setPortNumber(int portNumber) {
         this.portNumber = portNumber;
         return this;
@@ -40,7 +46,7 @@ public class ExternalOfficeManagerConfiguration {
     }
 
     public OfficeManager buildOfficeManager() {
-        UnoUrl unoUrl = connectionProtocol == OfficeConnectionProtocol.SOCKET ? UnoUrl.socket(portNumber) : UnoUrl.pipe(pipeName);
+        UnoUrl unoUrl = connectionProtocol == OfficeConnectionProtocol.SOCKET ? UnoUrl.socket(host,portNumber) : UnoUrl.pipe(pipeName);
         return new ExternalOfficeManager(unoUrl, connectOnStart);
     }
 
